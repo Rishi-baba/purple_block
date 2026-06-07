@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { gsap } from 'gsap-trial';
 import { ScrollTrigger } from 'gsap-trial/ScrollTrigger';
-import { SplitText as GSAPSplitText } from 'gsap-trial/SplitText';
+import SplitType from 'split-type';
 import { useGSAP } from '@gsap/react';
 import './Shuffle.css';
 
-gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const Shuffle = ({
   text,
@@ -103,13 +103,11 @@ const Shuffle = ({
       const build = () => {
         teardown();
 
-        splitRef.current = new GSAPSplitText(el, {
-          type: 'chars',
-          charsClass: 'shuffle-char',
-          wordsClass: 'shuffle-word',
-          linesClass: 'shuffle-line',
-          smartWrap: true,
-          reduceWhiteSpace: false
+        splitRef.current = new SplitType(el, {
+          types: 'chars,words,lines',
+          charClass: 'shuffle-char',
+          wordClass: 'shuffle-word',
+          lineClass: 'shuffle-line'
         });
 
         const chars = splitRef.current.chars || [];

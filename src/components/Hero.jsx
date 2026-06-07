@@ -1,38 +1,49 @@
 import React, { useRef } from 'react';
 import { gsap } from 'gsap-trial';
-import { SplitText } from 'gsap-trial/SplitText';
+import SplitType from 'split-type';
 import { useGSAP } from '@gsap/react';
 import StarBorder from './StarBorder';
-
-gsap.registerPlugin(SplitText);
 
 const Hero = () => {
   const containerRef = useRef(null);
 
   useGSAP(() => {
-    // Split the text twice: the parent acts as the overflow-hidden mask, the child animates up
-    const titleChildSplit = new SplitText(".hero-title", { type: "lines", linesClass: "split-child" });
-    const titleParentSplit = new SplitText(".hero-title", { type: "lines", linesClass: "split-parent overflow-hidden" });
+    // Split the text: SplitType automatically adds overflow-hidden to lines if we style them, 
+    // or we can wrap them manually, but for now we'll just animate the lines.
+    const titleSplit = new SplitType(".hero-title", { types: "lines" });
+    const pSplit = new SplitType(".hero-p", { types: "lines" });
 
-    const pChildSplit = new SplitText(".hero-p", { type: "lines", linesClass: "split-child" });
-    const pParentSplit = new SplitText(".hero-p", { type: "lines", linesClass: "split-parent overflow-hidden pt-1" });
+    // To mimic the double-split mask effect, we can wrap the generated lines in overflow-hidden divs
+    titleSplit.lines.forEach(line => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'overflow-hidden';
+      line.parentNode.insertBefore(wrapper, line);
+      wrapper.appendChild(line);
+    });
+
+    pSplit.lines.forEach(line => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'overflow-hidden pt-1';
+      line.parentNode.insertBefore(wrapper, line);
+      wrapper.appendChild(line);
+    });
 
     const tl = gsap.timeline();
 
     // Initial hidden state - push elements exactly 100% down out of their masks
-    gsap.set(titleChildSplit.lines, { y: "100%" });
-    gsap.set(pChildSplit.lines, { y: "100%" });
+    gsap.set(titleSplit.lines, { y: "100%" });
+    gsap.set(pSplit.lines, { y: "100%" });
     gsap.set(".hero-btn", { y: "100%" });
 
     // Slow, cinematic staggered reveal from the bottom cuts
-    tl.to(titleChildSplit.lines, {
+    tl.to(titleSplit.lines, {
       y: "0%",
       duration: 1.4,
       stagger: 0.15,
       ease: "power4.out",
       delay: 0.2
     })
-    .to(pChildSplit.lines, {
+    .to(pSplit.lines, {
       y: "0%",
       duration: 1.2,
       stagger: 0.1,
@@ -46,8 +57,8 @@ const Hero = () => {
     }, "-=1.0");
 
     return () => {
-      titleParentSplit.revert();
-      pParentSplit.revert();
+      titleSplit.revert();
+      pSplit.revert();
     };
   }, { scope: containerRef });
 

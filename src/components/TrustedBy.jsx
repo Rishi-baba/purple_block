@@ -51,7 +51,7 @@ const TrustedBy = () => {
         <div className="overflow-hidden rounded-full w-[3rem] h-[3rem]">
           <div className="trusted-anim w-full h-full rounded-full flex items-center justify-center border border-white/10 bg-white/5 overflow-hidden">
             <img 
-              src={`https://logo.clearbit.com/${current.domain}`} 
+              src={`https://www.google.com/s2/favicons?domain=${current.domain}&sz=128`} 
               alt={current.name}
               className="w-full h-full object-cover p-1.5"
               onError={(e) => {

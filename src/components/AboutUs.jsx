@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap-trial';
 import { ScrollTrigger } from 'gsap-trial/ScrollTrigger';
-import { SplitText } from 'gsap-trial/SplitText';
+import SplitType from 'split-type';
 import Shuffle from './Shuffle';
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger);
 
 const AboutUs = () => {
   const containerRef = useRef(null);
@@ -27,7 +27,7 @@ const AboutUs = () => {
       );
 
       // 1. Vision Scroll Reading Effect
-      const visionSplit = new SplitText(".vision-text", { type: "words,lines" });
+      const visionSplit = new SplitType(".vision-text", { types: "words,lines" });
       gsap.set(visionSplit.words, { opacity: 0.2 });
 
       ScrollTrigger.create({
@@ -68,7 +68,7 @@ const AboutUs = () => {
       });
 
       // 4. Founders Quote Reveal
-      const quoteText = new SplitText(".quote-text", { type: "lines" });
+      const quoteText = new SplitType(".quote-text", { types: "lines" });
       gsap.set(quoteText.lines, { opacity: 0, y: 15 });
       gsap.set(".quote-author", { opacity: 0 });
 
